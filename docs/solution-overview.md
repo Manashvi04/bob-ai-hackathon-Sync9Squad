@@ -1,41 +1,192 @@
 # Solution Overview
 
-## What We Built
+## Solution Name
 
-[Describe your solution in plain language. Avoid jargon — write as if explaining to a smart colleague unfamiliar with your tech stack.]
+PortFlowAI — Container Congestion Predictor & Port Operations Optimiser
 
-## How It Works
+---
 
-[Explain the core mechanism step by step. A numbered list or simple flow works well here.]
+## Overview
 
-1. [Step 1: e.g., "User connects their GitHub repository via OAuth"]
-2. [Step 2: e.g., "The system ingests pipeline logs and feeds them to watsonx.ai"]
-3. [Step 3: e.g., "An anomaly score is computed and displayed on the dashboard"]
-4. [Step 4: e.g., "Alerts are sent to Slack when the score exceeds a threshold"]
+PortFlowAI is an AI-assisted decision-support platform for port operations.
 
-## Architecture Diagram
+It combines vessel schedule data and port capacity information to predict congestion risks and recommend operational actions before bottlenecks become critical.
 
-> See [`architecture.md`](architecture.md) for the detailed diagram.
+The platform connects five major capabilities:
 
-[Optionally include a simple ASCII or Mermaid diagram here for quick reference.]
+1. Congestion prediction
+2. Berth optimisation
+3. Crane optimisation
+4. Routing and rescheduling recommendations
+5. 72-hour operations planning
 
-```
-[User] → [Frontend: React] → [API: FastAPI] → [watsonx.ai] → [Dashboard]
-                                    ↓
-                             [PostgreSQL DB]
-```
+---
 
-## Key Design Decisions
+## Core Workflow
 
-| Decision | Rationale |
-|---|---|
-| [e.g., Used watsonx.ai for anomaly detection] | [e.g., Pre-trained models reduced time-to-value vs. building from scratch] |
-| [Decision 2] | [Rationale 2] |
-| [Decision 3] | [Rationale 3] |
+### Step 1 — Data Input
 
-## IBM Technologies Used
+The system receives operational data such as:
 
-[Explain specifically HOW you used each IBM technology — not just that you used it.]
+- Vessel ID
+- Vessel name
+- ETA
+- ETD
+- Container volume
+- Vessel size
+- Required berth type
+- Berth availability
+- Berth capacity
+- Crane availability
+- Crane handling capacity
+- Yard utilisation
 
-- **[IBM Tech 1, e.g., watsonx.ai]:** [How it was used — e.g., "Used the `ibm/granite-13b-instruct-v2` model via the Python SDK to classify anomaly types from log text."]
-- **[IBM Tech 2]:** [How it was used]
+---
+
+### Step 2 — Feature Engineering
+
+The system calculates operational features such as:
+
+- Number of vessels arriving in a time window
+- Berth occupancy percentage
+- Crane demand
+- Estimated handling time
+- Yard pressure
+- Vessel waiting risk
+- Resource conflicts
+
+---
+
+### Step 3 — Congestion Prediction
+
+PortFlowAI produces a congestion risk score.
+
+Risk levels may be classified as:
+
+- Low
+- Medium
+- High
+- Critical
+
+The system highlights high-risk vessels, berths, and time windows.
+
+---
+
+### Step 4 — Berth Optimisation
+
+The berth optimisation engine checks:
+
+- Vessel arrival time
+- Berth availability
+- Vessel size
+- Berth capacity
+- Service duration
+- Existing assignments
+
+It recommends the best available berth assignment.
+
+---
+
+### Step 5 — Crane Optimisation
+
+The crane optimisation engine allocates available cranes based on:
+
+- Vessel workload
+- Container volume
+- Berth demand
+- Crane availability
+- Handling capacity
+
+The objective is to reduce vessel turnaround time while avoiding over-allocation.
+
+---
+
+### Step 6 — Routing Recommendations
+
+If congestion risk remains high, the system can recommend:
+
+- Delayed arrival
+- Alternate berth window
+- Vessel resequencing
+- Alternate port routing where supported
+
+---
+
+### Step 7 — 72-Hour Operations Plan
+
+The system generates a structured 72-hour operational schedule.
+
+The plan includes:
+
+- Vessel
+- ETA
+- Assigned berth
+- Assigned cranes
+- Yard pressure
+- Risk level
+- Recommended action
+- Shift timing
+
+---
+
+## Main Dashboard Views
+
+The application will contain:
+
+### Dashboard
+Overall port status and congestion summary.
+
+### Vessels
+Upcoming arrivals and vessel schedules.
+
+### Congestion
+Predicted congestion hotspots.
+
+### Berths & Cranes
+Resource assignments and availability.
+
+### Yard
+Yard utilisation and capacity risk.
+
+### Routing
+Recommended routing or rescheduling actions.
+
+### Alerts
+Operational warnings.
+
+### 72-Hour Plan
+Supervisor shift plan.
+
+---
+
+## What Makes PortFlowAI Different
+
+Many systems simply display operational data.
+
+PortFlowAI is designed around the complete decision workflow:
+
+**Predict → Explain → Recommend → Optimise → Plan**
+
+The system does not only say:
+
+> Congestion risk is high.
+
+It also tries to answer:
+
+> Why is the risk high?
+
+and:
+
+> What should the supervisor do about it?
+
+---
+
+## Human-in-the-Loop Design
+
+PortFlowAI is a decision-support system.
+
+It does not replace port supervisors.
+
+Instead, it provides recommendations that can be reviewed before operational decisions are applied.
+
+This makes the solution more practical for real port environments.
