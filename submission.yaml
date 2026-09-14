@@ -9,51 +9,67 @@
 # =============================================================================
 
 team:
-  name: ""                             # REQUIRED — e.g., "Orion Squad"
-  track: ""                            # REQUIRED — one of: AI | DevOps | Sustainability | Open
-  lead:
-    name: ""                           # REQUIRED — e.g., "Alice Chen"
-    email: ""                          # REQUIRED — e.g., "alice.chen@ibm.com"
+  name: "Sync9Squad"                             # REQUIRED — e.g., "Orion Squad"
+  track: "AI"                            # REQUIRED — one of: AI | DevOps | Sustainability | Open
+  lead: 
+    name: "Princee Bhingradiya"                           # REQUIRED — e.g., "Alice Chen"
+    email: "24dit006@charusat.edu.in"                          # REQUIRED — e.g., "alice.
   members:
-    - name: ""                         # REQUIRED — Team member 1
-      email: ""
-    - name: ""                         # Add more members by copying the two lines above
-      email: ""
-    - name: ""
-      email: ""
+    - name: "<Manashvi Choksi>"                         # REQUIRED — Team member 1
+      email: "24dit011@charusat.edu.in"
+    - name: "Krish Sabhaya"                         # Add more members by copying the two lines above
+      email: "24dit062@charusat.edu.in"
+    - name: "Rudra Joshi"
+      email: "24dit025@charusat.edu.in"
 
 submission:
-  title: ""                            # REQUIRED — Project display name, e.g., "SmartOps Dashboard"
+  title: "PortFlowAI — Container Congestion Predictor & Port Operations Optimiser"                            # REQUIRED — Project display name, e.g., "SmartOps Dashboard"
 
   problem_statement: >                 # REQUIRED — 1-3 sentences. What problem? Who has it?
-    Replace this text with a concise description of the real-world problem
-    your project addresses and who experiences it.
+    "Major ports face severe vessel and container congestion because berth,
+    crane, yard, and routing decisions are often made manually and congestion
+    is detected only after queues have already formed. This results in vessel
+    delays, poor resource utilisation, higher operating costs, and disruption
+    across global supply chains."
 
   solution_summary: >                  # REQUIRED — 1-3 sentences. What did you build?
-    Replace this text with a clear description of your solution
-    and how it addresses the problem above.
+    "PortFlowAI is an AI-assisted port operations platform that predicts
+    congestion hotspots using vessel schedules and port-capacity data,
+    recommends alternate routing strategies, optimises berth and crane
+    assignments, monitors yard utilisation, and generates a practical 72-hour
+    operations plan for shift supervisors."
 
   key_features:                        # REQUIRED — List 3 to 5 specific features you implemented
-    - ""                               # e.g., "Real-time pipeline anomaly detection using watsonx.ai"
-    - ""
-    - ""
-    - ""                               # optional 4th
-    - ""                               # optional 5th
+    - "Congestion hotspot prediction using vessel schedules, berth capacity, crane availability, and yard utilisation"                               # e.g., "Real-time pipeline anomaly detection using watsonx.ai"
+    - "Optimised berth and crane assignment recommendations"
+    - "Alternate routing and rescheduling recommendations for high-risk vessels"
+    - "72-hour port operations plan for shift supervisors"                               # optional 4th
+    - "Operations dashboard with vessel queue, resource utilisation, alerts, and recommended actions"                               # optional 5th
 
   tech_stack:
-    languages: []                      # REQUIRED — e.g., ["Python", "TypeScript"]
-    frameworks: []                     # e.g., ["FastAPI", "React"]
-    ibm_technologies: []               # e.g., ["watsonx.ai", "IBM Bob", "IBM Cloud Functions"]
+    languages: ["Python","TypeScript"]                      # REQUIRED — e.g., ["Python", "TypeScript"]
+    frameworks: ["FastAPI","React","Vite"]                     # e.g., ["FastAPI", "React"]
+    ibm_technologies: ["IBM BOB"]               # e.g., ["watsonx.ai", "IBM Bob", "IBM Cloud Functions"]
     databases: []                      # e.g., ["PostgreSQL", "Redis"]
-    other: []                          # e.g., ["Docker", "GitHub Actions", "Slack API"]
+    other: ["Pandas","NumPy", "Scikit-learn","Google OR-Tools","Recharts","GitHub Actions"]                          # e.g., ["Docker", "GitHub Actions", "Slack API"]
 
   what_we_are_most_proud_of: >         # Optional but recommended — guides judges to your best work
-    Replace with what aspect of the submission you consider strongest
-    and want judges to pay special attention to.
+    PortFlowAI goes beyond simply predicting port congestion. It connects
+    congestion prediction with actionable berth and crane optimisation,
+    alternate routing recommendations, operational alerts, and a 72-hour
+    operations plan for shift supervisors. The solution follows a complete
+    Predict → Explain → Recommend → Optimise → Plan workflow, helping port
+    operators move from reactive congestion management to proactive
+    decision-making.
 
   known_limitations: >                 # Optional but recommended — be honest about gaps
-    Replace with any known limitations, incomplete features,
-    or shortcuts taken due to time constraints.
+    The current hackathon implementation uses simulated or sample port
+    operational data rather than live AIS, terminal operating system, or
+    port community system feeds. Prediction quality therefore depends on
+    the available sample data and assumptions. A production deployment
+    would require integration with real-time vessel, berth, crane, yard,
+    weather, and terminal data, along with port-specific operational and
+    safety constraints.
 
 # =============================================================================
 # ARTIFACT LOCATIONS
