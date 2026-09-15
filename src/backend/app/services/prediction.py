@@ -15,38 +15,45 @@ from app.models.vessel import RiskLevel
 class CongestionPredictionEngine:
     def __init__(self):
         self._is_trained = False
-        self._regressor = RandomForestRegressor(n_estimators=40, random_state=42)
-        self._classifier = RandomForestClassifier(n_estimators=40, random_state=42)
+        self._regressor = RandomForestRegressor(n_estimators=100, random_state=42)
+        self._classifier = RandomForestClassifier(n_estimators=100, random_state=42, class_weight="balanced")
         self._train_engine()
 
     def _train_engine(self):
-        # Generate synthetic training samples based on maritime terminal physics
-        # Features: [total_moves, teu_capacity, draft_m, length_m, berth_occ_pct, yard_occ_pct, crane_eff, weather_factor]
-        np.random.seed(42)
-        n_samples = 600
+        """
+        Train on 1 200 synthetic samples with wider feature ranges so that all
+        four risk classes (Low / Medium / High / Critical) are represented.
+        n_estimators raised to 100 and class_weight='balanced' applied to the
+        classifier to compensate for the imbalance in the Critical class.
 
-        moves = np.random.uniform(300, 7500, n_samples)
-        teu_cap = np.random.uniform(1500, 24000, n_samples)
-        draft = np.random.uniform(9.0, 16.5, n_samples)
-        length = np.random.uniform(150.0, 400.0, n_samples)
-        berth_occ = np.random.uniform(40.0, 95.0, n_samples)
-        yard_occ = np.random.uniform(45.0, 95.0, n_samples)
-        crane_eff = np.random.uniform(65.0, 100.0, n_samples)
-        weather = np.random.choice([0.0, 0.5, 1.0], size=n_samples, p=[0.7, 0.2, 0.1])
+        Features: [total_moves, teu_capacity, draft_m, length_m,
+                   berth_occ_pct, yard_occ_pct, crane_eff, weather_factor]
+        """
+        np.random.seed(42)
+        n_samples = 1200
+
+        moves     = np.random.uniform(300,   13000, n_samples)
+        teu_cap   = np.random.uniform(1500,  24000, n_samples)
+        draft     = np.random.uniform(9.0,   16.5,  n_samples)
+        length    = np.random.uniform(150.0, 400.0, n_samples)
+        berth_occ = np.random.uniform(30.0,  98.0,  n_samples)
+        yard_occ  = np.random.uniform(30.0,  98.0,  n_samples)
+        crane_eff = np.random.uniform(55.0,  100.0, n_samples)
+        weather   = np.random.choice([0.0, 0.5, 1.0], size=n_samples, p=[0.6, 0.25, 0.15])
 
         X = np.column_stack([moves, teu_cap, draft, length, berth_occ, yard_occ, crane_eff, weather])
 
-        # Mathematical ground-truth function for congestion index (0 to 100)
+        # Ground-truth congestion index (0-100)
         y_score = (
-            (moves / 7500.0) * 25.0 +
+            (moves / 13000.0) * 25.0 +
             (berth_occ / 100.0) * 30.0 +
-            (yard_occ / 100.0) * 25.0 +
-            ((100.0 - crane_eff) / 35.0) * 12.0 +
+            (yard_occ  / 100.0) * 25.0 +
+            ((100.0 - crane_eff) / 45.0) * 12.0 +
             weather * 8.0
         )
         y_score = np.clip(y_score + np.random.normal(0, 2.5, n_samples), 10.0, 99.0)
 
-        # Classify into 0: Low (<45), 1: Medium (45-69), 2: High (70-84), 3: Critical (>=85)
+        # Classify: 0=Low (<45), 1=Medium (45-69), 2=High (70-84), 3=Critical (>=85)
         y_class = np.zeros(n_samples, dtype=int)
         y_class[y_score >= 45.0] = 1
         y_class[y_score >= 70.0] = 2

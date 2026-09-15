@@ -121,15 +121,13 @@ class AlternateRoutingEngine:
         if not rec:
             return False
         rec.status = "applied"
-        # Update associated vessel ETA in repo if applicable
         v = repo.get_vessel(rec.vessel_id)
         if v:
-            v_dict = v.model_dump()
-            v_dict["eta"] = rec.recommended_eta
-            v_dict["delay_hours"] = max(0.0, v_dict["delay_hours"] - rec.delay_hours_mitigated)
-            v_dict["recommended_action"] = f"Applied {rec.strategy_type}: Saved {rec.fuel_saved_tons} MT fuel"
-            from app.models.vessel import Vessel
-            repo._vessels[v.id] = Vessel(**v_dict)
+            from app.models.vessel import VesselUpdate
+            repo.update_vessel(v.id, VesselUpdate(
+                eta=rec.recommended_eta,
+                delay_hours=max(0.0, v.delay_hours - rec.delay_hours_mitigated),
+            ))
         return True
 
 
