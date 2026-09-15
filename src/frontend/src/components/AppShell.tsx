@@ -1,21 +1,17 @@
 import { useEffect, useState } from 'react'
-import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
+import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import {
   Anchor,
   Bell,
   Bot,
   CalendarClock,
   ChartNoAxesCombined,
-  ChevronDown,
   Container,
   LayoutDashboard,
   Menu,
-  Moon,
-  RadioTower,
   Route,
   Ship,
   Sparkles,
-  Sun,
   Warehouse,
   X,
 } from 'lucide-react'
@@ -23,7 +19,6 @@ import { BobAssistantModal } from './BobAssistantModal'
 import { NotificationDropdown } from './NotificationDropdown'
 import { ProfileDropdown } from './ProfileDropdown'
 import { TerminalSelector } from './TerminalSelector'
-import { useTheme } from '../context/ThemeContext'
 import { api } from '../services/api'
 
 const navigation = [
@@ -38,7 +33,6 @@ const navigation = [
 ]
 
 export function AppShell() {
-  const { theme, toggleTheme } = useTheme()
   const [open, setOpen] = useState(false)
   const [bobOpen, setBobOpen] = useState(false)
   const [alertsCount, setAlertsCount] = useState(5)
@@ -129,27 +123,6 @@ export function AppShell() {
               <i />
               LIVE
             </span>
-            <div className="theme-toggle-group" role="group" aria-label="Appearance Mode">
-              <button
-                type="button"
-                className={`theme-toggle-segment ${theme === 'dark' ? 'active' : ''}`}
-                onClick={() => theme !== 'dark' && toggleTheme()}
-                title="Switch to Dark Mode"
-              >
-                <Moon size={14} />
-                <span>Dark</span>
-              </button>
-              <button
-                type="button"
-                className={`theme-toggle-segment ${theme === 'light' ? 'active' : ''}`}
-                onClick={() => theme !== 'light' && toggleTheme()}
-                title="Switch to Light Mode"
-              >
-                <Sun size={14} />
-                <span>Light</span>
-              </button>
-            </div>
-
             <NotificationDropdown
               alertsCount={alertsCount}
               onAlertsChange={(count) => setAlertsCount(count)}
