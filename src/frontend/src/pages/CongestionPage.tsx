@@ -24,8 +24,11 @@ import {
   YAxis,
 } from 'recharts'
 import { api, CongestionForecast, HotspotZone, HourlyCongestion } from '../services/api'
+import { useTheme } from '../context/ThemeContext'
 
 export function CongestionPage() {
+  const { theme } = useTheme()
+  const isDark = theme === 'dark'
   const [forecast, setForecast] = useState<CongestionForecast | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -166,15 +169,16 @@ export function CongestionPage() {
                   <stop offset="100%" stopColor="#f59e0b" stopOpacity={0.0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1c3447" />
-              <XAxis dataKey="time" stroke="#70869a" fontSize={11} />
-              <YAxis stroke="#70869a" fontSize={11} domain={[0, 100]} />
+              <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#1c3447' : '#e2e8f0'} />
+              <XAxis dataKey="time" stroke={isDark ? '#70869a' : '#64748b'} fontSize={11} />
+              <YAxis stroke={isDark ? '#70869a' : '#64748b'} fontSize={11} domain={[0, 100]} />
               <Tooltip
                 contentStyle={{
-                  background: '#0d2233',
-                  border: '1px solid #254157',
+                  background: isDark ? '#0d2233' : '#ffffff',
+                  border: isDark ? '1px solid #254157' : '1px solid #cbd5e1',
                   borderRadius: '6px',
-                  color: '#e2f0fc',
+                  color: isDark ? '#e2f0fc' : '#0f172a',
+                  boxShadow: isDark ? '0 8px 24px rgba(0,0,0,0.5)' : '0 4px 16px rgba(15,23,42,0.1)',
                 }}
               />
               <Legend wrapperStyle={{ paddingTop: '10px' }} />

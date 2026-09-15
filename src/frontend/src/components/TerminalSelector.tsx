@@ -1,40 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { CheckCircle2, ChevronDown, RadioTower } from 'lucide-react'
+import { useTerminal } from '../context/TerminalContext'
 
 export function TerminalSelector() {
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedTerminal, setSelectedTerminal] = useState({
-    id: 'T1',
-    name: 'North Harbor · T1',
-    type: 'Deepwater Container Hub',
-    berths: '8 Berths · 12 Cranes',
-    status: 'Operational',
-  })
+  const { terminal, setTerminal, terminalsList } = useTerminal()
   const dropdownRef = useRef<HTMLDivElement>(null)
-
-  const terminals = [
-    {
-      id: 'T1',
-      name: 'North Harbor · T1',
-      type: 'Deepwater Container Hub',
-      berths: '8 Berths · 12 Cranes',
-      status: 'Operational',
-    },
-    {
-      id: 'T2',
-      name: 'South Basin · T2',
-      type: 'Regional Feeder Dock',
-      berths: '4 Berths · 6 Cranes',
-      status: 'Connected',
-    },
-    {
-      id: 'T3',
-      name: 'East Gateway Intermodal',
-      type: 'Automated Rail Terminal',
-      berths: '6 Railhead Tracks',
-      status: 'Standby',
-    },
-  ]
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -50,8 +21,8 @@ export function TerminalSelector() {
     }
   }, [isOpen])
 
-  const handleSelect = (t: typeof terminals[0]) => {
-    setSelectedTerminal(t)
+  const handleSelect = (t: typeof terminalsList[0]) => {
+    setTerminal(t)
     setIsOpen(false)
   }
 
@@ -65,7 +36,7 @@ export function TerminalSelector() {
         <RadioTower size={17} />
         <div>
           <small>ACTIVE TERMINAL</small>
-          <b>{selectedTerminal.name}</b>
+          <b>{terminal.name}</b>
         </div>
         <ChevronDown
           size={15}
@@ -84,10 +55,10 @@ export function TerminalSelector() {
           </div>
 
           <div className="terminal-flyout-list">
-            {terminals.map((t) => (
+            {terminalsList.map((t) => (
               <div
                 key={t.id}
-                className={`terminal-option ${t.id === selectedTerminal.id ? 'current' : ''}`}
+                className={`terminal-option ${t.id === terminal.id ? 'current' : ''}`}
                 onClick={() => handleSelect(t)}
               >
                 <div className="terminal-option-content">
@@ -97,7 +68,7 @@ export function TerminalSelector() {
                   </div>
                   <small>{t.type} · {t.berths}</small>
                 </div>
-                {t.id === selectedTerminal.id && (
+                {t.id === terminal.id && (
                   <CheckCircle2 size={15} color="#19c3df" />
                 )}
               </div>

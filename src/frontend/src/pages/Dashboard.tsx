@@ -11,6 +11,8 @@ import {
   Ship,
   Sparkles,
   TrendingUp,
+  UserCheck,
+  Radio,
 } from 'lucide-react'
 import {
   Area,
@@ -22,8 +24,15 @@ import {
   YAxis,
 } from 'recharts'
 import { api, CongestionForecast, TerminalSummary, Vessel } from '../services/api'
+import { useTheme } from '../context/ThemeContext'
+import { useSupervisor } from '../context/SupervisorContext'
+import { useTerminal } from '../context/TerminalContext'
 
 export function Dashboard() {
+  const { theme } = useTheme()
+  const isDark = theme === 'dark'
+  const { supervisor } = useSupervisor()
+  const { terminal } = useTerminal()
   const [summary, setSummary] = useState<TerminalSummary | null>(null)
   const [forecast, setForecast] = useState<CongestionForecast | null>(null)
   const [movements, setMovements] = useState<Vessel[]>([])
@@ -113,11 +122,25 @@ export function Dashboard() {
     <div className="page">
       <section className="page-heading">
         <div>
-          <p>MARITIME LOGISTICS COMMAND · NORTH HARBOR T1</p>
+          <p>MARITIME LOGISTICS COMMAND · {terminal.name.toUpperCase()}</p>
           <h1>Port Operations Dashboard</h1>
           <span>
             Real-time AI congestion intelligence, berth synchronisation, and predictive workload optimization.
           </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px', flexWrap: 'wrap' }}>
+            <span className="badge-pill" style={{ fontSize: '11px' }}>
+              <UserCheck size={13} color="#19c3df" />
+              Duty Lead: <b>{supervisor.name}</b> ({supervisor.role})
+            </span>
+            <span className="badge-pill" style={{ fontSize: '11px', background: 'transparent', border: '1px solid var(--border-primary)', color: 'var(--text-secondary)' }}>
+              <Clock3 size={13} color="#f59e0b" />
+              {supervisor.shift}
+            </span>
+            <span className="badge-pill" style={{ fontSize: '11px', background: 'transparent', border: '1px solid var(--border-primary)', color: 'var(--text-secondary)' }}>
+              <Radio size={13} color="#10b981" />
+              {supervisor.radioChannel}
+            </span>
+          </div>
         </div>
         <div style={{ display: 'flex', gap: '0.75rem' }}>
           <button className="secondary-button" onClick={loadData} title="Refresh Live State">
@@ -173,15 +196,16 @@ export function Dashboard() {
                     <stop offset="100%" stopColor="#19c3df" stopOpacity={0.02} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1c3447" />
-                <XAxis dataKey="time" stroke="#70869a" fontSize={11} />
-                <YAxis stroke="#70869a" fontSize={11} domain={[0, 100]} />
+                <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#1c3447' : '#e2e8f0'} />
+                <XAxis dataKey="time" stroke={isDark ? '#70869a' : '#64748b'} fontSize={11} />
+                <YAxis stroke={isDark ? '#70869a' : '#64748b'} fontSize={11} domain={[0, 100]} />
                 <Tooltip
                   contentStyle={{
-                    background: '#0d2233',
-                    border: '1px solid #254157',
+                    background: isDark ? '#0d2233' : '#ffffff',
+                    border: isDark ? '1px solid #254157' : '1px solid #cbd5e1',
                     borderRadius: '6px',
-                    color: '#e2f0fc',
+                    color: isDark ? '#e2f0fc' : '#0f172a',
+                    boxShadow: isDark ? '0 8px 24px rgba(0,0,0,0.5)' : '0 4px 16px rgba(15,23,42,0.1)',
                   }}
                 />
                 <Area

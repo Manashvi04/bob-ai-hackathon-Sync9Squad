@@ -1351,24 +1351,54 @@ main { min-width: 0; position: relative; }
 /* ==========================================
    Theme Toggle Button & Light Mode Theme Overrides
    ========================================== */
-.theme-toggle-btn {
-  background: #0e2434;
-  border: 1px solid #1a3649;
-  color: #cde4f5;
-  border-radius: 8px;
-  padding: 6px 12px;
+.theme-toggle-group {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  background: #0b1f2f;
+  border: 1px solid #1a3c53;
+  border-radius: 20px;
+  padding: 3px;
+  gap: 2px;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+.theme-toggle-segment {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 14px;
   font-size: 11px;
   font-weight: 600;
+  border: none;
+  background: transparent;
+  color: #648197;
   cursor: pointer;
   transition: all 0.2s ease;
 }
-.theme-toggle-btn:hover {
-  background: #153952;
-  border-color: #19c3df;
+.theme-toggle-segment:hover {
+  color: #dce8f1;
+}
+.theme-toggle-segment.active {
+  background: #14384e;
   color: #19c3df;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="light"] .theme-toggle-group {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+}
+[data-theme="light"] .theme-toggle-segment {
+  color: #64748b;
+}
+[data-theme="light"] .theme-toggle-segment:hover {
+  color: #0f172a;
+}
+[data-theme="light"] .theme-toggle-segment.active {
+  background: #ffffff;
+  color: #0284c7;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.12);
 }
 
 [data-theme="light"] .sidebar {
@@ -1728,4 +1758,201 @@ main { min-width: 0; position: relative; }
 }
 [data-theme="light"] .checklist-item.done {
   color: #94a3b8;
+}
+
+/* Port & Terminal Selector in Light */
+[data-theme="light"] .port-selector {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #475569;
+}
+[data-theme="light"] .port-selector b {
+  color: #0f172a;
+}
+[data-theme="light"] .port-selector small {
+  color: #64748b;
+}
+[data-theme="light"] .port-selector.clickable:hover,
+[data-theme="light"] .port-selector.clickable.active {
+  background: #f1f5f9;
+  border-color: #0284c7;
+  color: #0284c7;
+}
+[data-theme="light"] .terminal-option:hover {
+  background: #f1f5f9;
+}
+[data-theme="light"] .terminal-option.current {
+  background: #e0f2fe;
+  border-left-color: #0284c7;
+}
+[data-theme="light"] .terminal-option-content b {
+  color: #0f172a;
+}
+[data-theme="light"] .terminal-option-content small {
+  color: #64748b;
+}
+[data-theme="light"] .terminal-badge {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+/* Profile Dropdown in Light */
+[data-theme="light"] .profile.clickable:hover,
+[data-theme="light"] .profile.clickable.active {
+  background: #f1f5f9;
+}
+[data-theme="light"] .profile-info-grid span {
+  color: #0f172a;
+}
+[data-theme="light"] .profile-info-grid small {
+  color: #64748b;
+}
+[data-theme="light"] .profile-menu-item {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #1e293b;
+}
+[data-theme="light"] .profile-menu-item:hover {
+  background: #f1f5f9;
+  border-color: #0284c7;
+  color: #0284c7;
+}
+[data-theme="light"] .supervisor-switch-item:hover {
+  background: #f1f5f9;
+}
+[data-theme="light"] .supervisor-switch-item.current {
+  background: #e0f2fe;
+}
+[data-theme="light"] .supervisor-switch-item b {
+  color: #0f172a;
+}
+[data-theme="light"] .supervisor-switch-item small {
+  color: #64748b;
+}
+
+/* Notification Popover in Light */
+[data-theme="light"] .notif-count-chip {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+[data-theme="light"] .mark-all-btn {
+  color: #0284c7;
+}
+[data-theme="light"] .notif-item {
+  border-bottom-color: #e2e8f0;
+}
+[data-theme="light"] .notif-item:hover {
+  background: #f8fafc;
+}
+[data-theme="light"] .notif-item-title b {
+  color: #0f172a;
+}
+[data-theme="light"] .notif-item p {
+  color: #475569;
+}
+[data-theme="light"] .notif-item-footer {
+  color: #64748b;
+}
+[data-theme="light"] .notif-resolve-link {
+  background: #e0f2fe;
+  border-color: #bae6fd;
+  color: #0284c7;
+}
+[data-theme="light"] .notif-resolve-link:hover {
+  background: #0284c7;
+  color: #ffffff;
+}
+
+/* Berths & Cranes in Light */
+[data-theme="light"] .current-vessel-box {
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+}
+[data-theme="light"] .current-vessel-box strong {
+  color: #0f172a;
+}
+[data-theme="light"] .current-vessel-box span {
+  color: #475569;
+}
+[data-theme="light"] .empty-berth-box {
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+}
+[data-theme="light"] .crane-icon {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+[data-theme="light"] .crane-header b {
+  color: #0f172a;
+}
+[data-theme="light"] .crane-header small {
+  color: #64748b;
+}
+[data-theme="light"] .crane-stat b,
+[data-theme="light"] .crane-stat span {
+  color: #1e293b;
+}
+[data-theme="light"] .crane-assigned-vessel {
+  border-top-color: #e2e8f0;
+}
+[data-theme="light"] .crane-assigned-vessel span {
+  color: #0f172a;
+}
+
+/* Yard Zones in Light */
+[data-theme="light"] .zone-card-top b {
+  color: #0f172a;
+}
+[data-theme="light"] .zone-type-badge {
+  color: #64748b;
+}
+[data-theme="light"] .zone-numbers span {
+  color: #0f172a;
+}
+[data-theme="light"] .zone-footer-meta {
+  border-top-color: #e2e8f0;
+  color: #64748b;
+}
+[data-theme="light"] .zone-footer-meta b {
+  color: #1e293b;
+}
+
+/* Alternate Routing in Light */
+[data-theme="light"] .strategy-pill {
+  background: #e0f2fe;
+  color: #0369a1;
+  border-color: #bae6fd;
+}
+[data-theme="light"] .rec-rationale {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+[data-theme="light"] .rec-rationale p {
+  color: #334155;
+}
+[data-theme="light"] .rec-meta-item span {
+  color: #1e293b;
+}
+[data-theme="light"] .rec-card-footer {
+  border-top-color: #e2e8f0;
+}
+
+/* 72-Hour Plan in Light */
+[data-theme="light"] .shift-header {
+  border-bottom-color: #e2e8f0;
+}
+[data-theme="light"] .shift-header-stats b {
+  color: #0f172a;
+}
+[data-theme="light"] .task-target {
+  color: #0f172a;
+}
+
+/* IBM Bob in Light */
+[data-theme="light"] .copilot-metric-box {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+[data-theme="light"] .copilot-metric-box b {
+  color: #0284c7;
 }

@@ -24,8 +24,11 @@ import {
   YAxis,
 } from 'recharts'
 import { api, YardZone } from '../services/api'
+import { useTheme } from '../context/ThemeContext'
 
 export function YardPage() {
+  const { theme } = useTheme()
+  const isDark = theme === 'dark'
   const [zones, setZones] = useState<YardZone[]>([])
   const [selectedType, setSelectedType] = useState('All')
   const [loading, setLoading] = useState(true)
@@ -241,15 +244,16 @@ export function YardPage() {
           <div style={{ width: '100%', height: '240px' }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={dwellData} margin={{ top: 16, right: 16, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1c3447" />
-                <XAxis dataKey="range" stroke="#70869a" fontSize={11} />
-                <YAxis stroke="#70869a" fontSize={11} />
+                <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#1c3447' : '#e2e8f0'} />
+                <XAxis dataKey="range" stroke={isDark ? '#70869a' : '#64748b'} fontSize={11} />
+                <YAxis stroke={isDark ? '#70869a' : '#64748b'} fontSize={11} />
                 <Tooltip
                   contentStyle={{
-                    background: '#0d2233',
-                    border: '1px solid #254157',
+                    background: isDark ? '#0d2233' : '#ffffff',
+                    border: isDark ? '1px solid #254157' : '1px solid #cbd5e1',
                     borderRadius: '6px',
-                    color: '#e2f0fc',
+                    color: isDark ? '#e2f0fc' : '#0f172a',
+                    boxShadow: isDark ? '0 8px 24px rgba(0,0,0,0.5)' : '0 4px 16px rgba(15,23,42,0.1)',
                   }}
                 />
                 <Bar dataKey="count" name="Zone Clusters" radius={[4, 4, 0, 0]}>

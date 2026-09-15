@@ -13,8 +13,12 @@ import {
   UserCheck,
 } from 'lucide-react'
 import { api, Plan72Hour, ShiftPlan } from '../services/api'
+import { useSupervisor } from '../context/SupervisorContext'
+import { useTerminal } from '../context/TerminalContext'
 
 export function PlanPage() {
+  const { supervisor } = useSupervisor()
+  const { terminal } = useTerminal()
   const [plan, setPlan] = useState<Plan72Hour | null>(null)
   const [activeDay, setActiveDay] = useState(0) // 0 for Day 1, 1 for Day 2, 2 for Day 3
   const [loading, setLoading] = useState(true)
@@ -60,11 +64,17 @@ export function PlanPage() {
     <div className="page">
       <section className="page-heading">
         <div>
-          <p>SHIFT SUPERVISOR DIRECTIVE · 72-HOUR OUTLOOK</p>
+          <p>SHIFT SUPERVISOR DIRECTIVE · {terminal.name.toUpperCase()}</p>
           <h1>Port Operations Execution Plan</h1>
           <span>
             {plan?.summary || 'Operational schedule across 9 shifts covering quayside cranes, berth windows, yard gates, and supervisor safety checklists.'}
           </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
+            <span className="badge-pill" style={{ fontSize: '11px' }}>
+              <UserCheck size={13} color="#19c3df" />
+              Active Shift Lead: <b>{supervisor.name}</b> ({supervisor.role})
+            </span>
+          </div>
         </div>
         <div style={{ display: 'flex', gap: '0.75rem' }}>
           <button className="secondary-button" onClick={() => window.print()}>
@@ -106,8 +116,8 @@ export function PlanPage() {
           </div>
           <div>
             <p>CURRENT SHIFT SUPERVISOR</p>
-            <strong>Alex Singh</strong>
-            <span>Shift B (14:00 – 22:00)</span>
+            <strong>{supervisor.name}</strong>
+            <span>{supervisor.shift}</span>
           </div>
         </article>
 
@@ -138,7 +148,11 @@ export function PlanPage() {
 
       {/* Shifts List for Selected Day */}
       <div className="shifts-container">
-        {days[activeDay].shifts.map((shift) => (
+        {days[activeDay].shifts.map((shift, idx) => {
+          const isCurrentActiveShift = activeDay === 0 && idx === 0
+          const isSupervisorShift = shift.shift_label.includes(supervisor.shift.slice(0, 7))
+          const shiftLead = isCurrentActiveShift || isSupervisorShift ? `${supervisor.name} (${supervisor.badge})` : shift.supervisor
+          return (
           <article className="shift-card" key={shift.shift_id}>
             <div className="shift-header">
               <div>
@@ -147,9 +161,14 @@ export function PlanPage() {
                   <span className={`risk-tag tag-${shift.risk_level}`}>
                     {shift.risk_level.toUpperCase()}
                   </span>
+                  {(isCurrentActiveShift || isSupervisorShift) && (
+                    <span className="duty-tag" style={{ background: '#103931', color: '#10b981', padding: '2px 8px', borderRadius: '12px', fontSize: '9px' }}>
+                      <span className="live-dot" /> ON DUTY NOW
+                    </span>
+                  )}
                 </div>
                 <small style={{ color: '#8aa3b9' }}>
-                  Supervisor in Charge: <b>{shift.supervisor}</b>
+                  Supervisor in Charge: <b>{shiftLead}</b>
                 </small>
               </div>
 
@@ -227,7 +246,8 @@ export function PlanPage() {
               </div>
             </div>
           </article>
-        ))}
+          )
+        })}
       </div>
     </div>
   )

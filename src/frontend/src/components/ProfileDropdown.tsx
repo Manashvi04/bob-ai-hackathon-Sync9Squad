@@ -15,26 +15,17 @@ import {
   X,
 } from 'lucide-react'
 
+import { useSupervisor } from '../context/SupervisorContext'
+
 export function ProfileDropdown() {
   const [isOpen, setIsOpen] = useState(false)
-  const [currentSupervisor, setCurrentSupervisor] = useState({
-    name: 'Alex Singh',
-    role: 'Lead Shift Supervisor',
-    id: 'SUP-804',
-    shift: 'Shift B (14:00 – 22:00 UTC)',
-    terminal: 'North Harbor · T1',
-    status: 'On Active Duty',
-  })
+  const { supervisor, setSupervisor, supervisorsList } = useSupervisor()
   const [showHandoverModal, setShowHandoverModal] = useState(false)
   const [handoverSuccess, setHandoverSuccess] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  const supervisorsList = [
-    { name: 'Alex Singh', role: 'Lead Shift Supervisor', shift: 'Shift B (14:00 – 22:00)' },
-    { name: 'Elena Rostova', role: 'Quayside Operations Lead', shift: 'Shift A (06:00 – 14:00)' },
-    { name: 'Marcus Vance', role: 'Yard & Intermodal Rail Lead', shift: 'Shift C (22:00 – 06:00)' },
-    { name: 'David Chen', role: 'Harbour Master Liaison', shift: 'Shift B (14:00 – 22:00)' },
-  ]
+  // Incoming relief supervisor
+  const reliefSupervisor = supervisorsList.find((s) => s.name !== supervisor.name) || supervisorsList[1]
 
   // Close when clicking outside
   useEffect(() => {
@@ -52,12 +43,7 @@ export function ProfileDropdown() {
   }, [isOpen])
 
   const handleSelectSupervisor = (sup: typeof supervisorsList[0]) => {
-    setCurrentSupervisor((prev) => ({
-      ...prev,
-      name: sup.name,
-      role: sup.role,
-      shift: sup.shift,
-    }))
+    setSupervisor(sup)
     setIsOpen(false)
   }
 
@@ -79,14 +65,14 @@ export function ProfileDropdown() {
         title="Supervisor Profile & Shift Handover"
       >
         <span>
-          {currentSupervisor.name
+          {supervisor.name
             .split(' ')
             .map((n) => n[0])
             .join('')}
         </span>
         <div>
-          <b>{currentSupervisor.name}</b>
-          <small>{currentSupervisor.role}</small>
+          <b>{supervisor.name}</b>
+          <small>{supervisor.role}</small>
         </div>
         <ChevronDown
           size={16}
@@ -103,17 +89,17 @@ export function ProfileDropdown() {
           <div className="profile-flyout-header">
             <div className="profile-flyout-avatar">
               <span>
-                {currentSupervisor.name
+                {supervisor.name
                   .split(' ')
                   .map((n) => n[0])
                   .join('')}
               </span>
             </div>
             <div>
-              <b>{currentSupervisor.name}</b>
-              <small>{currentSupervisor.role}</small>
+              <b>{supervisor.name}</b>
+              <small>{supervisor.role}</small>
               <span className="duty-tag">
-                <span className="live-dot" /> {currentSupervisor.status}
+                <span className="live-dot" /> {supervisor.status}
               </span>
             </div>
           </div>
@@ -122,11 +108,11 @@ export function ProfileDropdown() {
             <div className="profile-info-grid">
               <div>
                 <small>SUPERVISOR ID</small>
-                <span>{currentSupervisor.id}</span>
+                <span>{supervisor.id}</span>
               </div>
               <div>
                 <small>CURRENT SHIFT</small>
-                <span style={{ color: '#19c3df' }}>{currentSupervisor.shift}</span>
+                <span style={{ color: '#19c3df' }}>{supervisor.shift}</span>
               </div>
               <div>
                 <small>ASSIGNED QUAYS</small>
@@ -134,7 +120,7 @@ export function ProfileDropdown() {
               </div>
               <div>
                 <small>RADIO CHANNEL</small>
-                <span>VHF Channel 12</span>
+                <span>{supervisor.radioChannel}</span>
               </div>
             </div>
 
@@ -168,14 +154,14 @@ export function ProfileDropdown() {
               {supervisorsList.map((sup) => (
                 <div
                   key={sup.name}
-                  className={`supervisor-switch-item ${sup.name === currentSupervisor.name ? 'current' : ''}`}
+                  className={`supervisor-switch-item ${sup.name === supervisor.name ? 'current' : ''}`}
                   onClick={() => handleSelectSupervisor(sup)}
                 >
                   <div>
                     <b>{sup.name}</b>
                     <small>{sup.role} · {sup.shift}</small>
                   </div>
-                  {sup.name === currentSupervisor.name && (
+                  {sup.name === supervisor.name && (
                     <CheckCircle2 size={15} color="#10b981" />
                   )}
                 </div>
@@ -205,7 +191,7 @@ export function ProfileDropdown() {
             <div className="modal-header">
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <FileText size={18} color="#19c3df" />
-                <h3>Shift Handover Protocol · Shift B to Shift C</h3>
+                <h3>Shift Handover Protocol · {supervisor.name} to {reliefSupervisor.name}</h3>
               </div>
               <button className="close-btn" onClick={() => setShowHandoverModal(false)}>
                 <X size={18} />
@@ -218,7 +204,7 @@ export function ProfileDropdown() {
                   <CheckCircle2 size={42} color="#10b981" />
                   <h3 style={{ marginTop: '10px' }}>Handover Protocol Completed</h3>
                   <p style={{ color: '#829db5' }}>
-                    TOS verification logged. Shift C supervisor Marcus Vance notified.
+                    TOS verification logged. Incoming supervisor {reliefSupervisor.name} notified.
                   </p>
                 </div>
               ) : (
@@ -226,11 +212,11 @@ export function ProfileDropdown() {
                   <div className="metric-row">
                     <div className="metric-box">
                       <small>OUTGOING LEAD</small>
-                      <b>Alex Singh</b>
+                      <b>{supervisor.name}</b>
                     </div>
                     <div className="metric-box">
                       <small>INCOMING RELIEF</small>
-                      <b>Marcus Vance</b>
+                      <b>{reliefSupervisor.name}</b>
                     </div>
                   </div>
 

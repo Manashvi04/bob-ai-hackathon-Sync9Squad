@@ -10,6 +10,8 @@ import {
   X,
 } from 'lucide-react'
 import { api, AssistantResponse } from '../services/api'
+import { useSupervisor } from '../context/SupervisorContext'
+import { useTerminal } from '../context/TerminalContext'
 
 interface Props {
   isOpen: boolean
@@ -17,15 +19,18 @@ interface Props {
 }
 
 export function BobAssistantModal({ isOpen, onClose }: Props) {
+  const { supervisor } = useSupervisor()
+  const { terminal } = useTerminal()
   const [query, setQuery] = useState('')
   const [loading, setLoading] = useState(false)
+  const firstName = supervisor.name.split(' ')[0]
   const [conversation, setConversation] = useState<
     Array<{ role: 'user' | 'assistant'; content: string; metrics?: Record<string, string>; actions?: string[] }>
   >([
     {
       role: 'assistant',
       content:
-        'Hello Alex, I am **IBM Bob** — your Port Operations AI Copilot. I analyze real-time AIS vessel movements, quay crane assignments, and yard capacities to recommend optimal decisions. How can I assist you on this shift?',
+        `Hello ${firstName}, I am **IBM Bob** — your Port Operations AI Copilot. I analyze real-time AIS vessel movements, quay crane assignments, and yard capacities at ${terminal.name} to recommend optimal decisions. How can I assist you on ${supervisor.shift}?`,
       actions: [
         'Which berths have conflicts tomorrow?',
         'How to relieve Yard Zone Y-04 pressure?',

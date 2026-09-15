@@ -129,14 +129,26 @@ export function AppShell() {
               <i />
               LIVE
             </span>
-            <button
-              className="theme-toggle-btn"
-              onClick={toggleTheme}
-              title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-            >
-              {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
-              <span>{theme === 'dark' ? 'Light' : 'Dark'}</span>
-            </button>
+            <div className="theme-toggle-group" role="group" aria-label="Appearance Mode">
+              <button
+                type="button"
+                className={`theme-toggle-segment ${theme === 'dark' ? 'active' : ''}`}
+                onClick={() => theme !== 'dark' && toggleTheme()}
+                title="Switch to Dark Mode"
+              >
+                <Moon size={14} />
+                <span>Dark</span>
+              </button>
+              <button
+                type="button"
+                className={`theme-toggle-segment ${theme === 'light' ? 'active' : ''}`}
+                onClick={() => theme !== 'light' && toggleTheme()}
+                title="Switch to Light Mode"
+              >
+                <Sun size={14} />
+                <span>Light</span>
+              </button>
+            </div>
 
             <NotificationDropdown
               alertsCount={alertsCount}
